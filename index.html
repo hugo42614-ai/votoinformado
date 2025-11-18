@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Comparador interactivo de programas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f3f4f6;
+      padding: 16px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 16px 16px 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 24px 32px 32px;
+        border-radius: 20px;
+      }
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #4b5563;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    .subtitle span {
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .tema-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tema-button {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: #374151;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .tema-button:hover {
+      background: #f3f4f6;
+    }
+
+    .tema-button.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #ffffff;
+    }
+
+    .tema-descripcion {
+      background: #f3f4f6;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      color: #374151;
+      margin-bottom: 16px;
+    }
+
+    .tema-descripcion span {
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+    }
+
+    .card {
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      padding: 12px;
+      font-size: 0.9rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .card-subtitle {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+
+    .card-text {
+      font-size: 0.85rem;
+      color: #374151;
+      line-height: 1.4;
+    }
+
+    .card-pc {
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+
+    .card-pc .card-title {
+      color: #b91c1c;
+    }
+
+    .card-pc .badge {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .card-jak {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+    }
+
+    .card-jak .card-title {
+      color: #1d4ed8;
+    }
+
+    .card-jak .badge {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Comparador interactivo de programas de gobierno</h1>
+    <p class="subtitle">
+      Elige un tema y compara, en lenguaje sencillo, lo que proponen el
+      <span>Partido Comunista (PC)</span> y <span>José Antonio Kast (JAK)</span>.
+    </p>
+
+    <!-- Selector de temas -->
+    <div>
+      <div class="section-title">
+        1. Elige el tema que más te interesa:
+      </div>
+      <div class="tema-buttons" id="temaButtons"></div>
+    </div>
+
+    <!-- Descripción del tema -->
+    <div class="tema-descripcion" id="temaDescripcion">
+      <!-- Se rellena por JS -->
+    </div>
+
+    <!-- Comparador PC vs JAK -->
+    <div class="grid">
+      <div class="card card-pc">
+        <div class="card-header">
+          <div class="card-title">Partido Comunista (PC)</div>
+          <div class="badge">Estado más grande</div>
+        </div>
+        <div class="card-subtitle" id="pcTitulo"></div>
+        <div class="card-text" id="pcTexto"></div>
+      </div>
+
+      <div class="card card-jak">
+        <div class="card-header">
+          <div class="card-title">José Antonio Kast (JAK)</div>
+          <div class="badge">Estado más pequeño</div>
+        </div>
+        <div class="card-subtitle" id="jakTitulo"></div>
+        <div class="card-text" id="jakTexto"></div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Esta herramienta no te dice por quién votar; solo muestra las diferencias entre programas para que decidas con más información.
+    </div>
+  </div>
+
+  <script>
+    const TEMAS = [
+      {
+        id: "salud",
+        nombre: "Salud",
+        descripcion: "Cómo cada programa quiere organizar el sistema de salud.",
+        pc: {
+          titulo: "Sistema universal público",
+          texto:
+            "El PC propone un sistema de salud universal, público y solidario. El Estado es la columna vertebral y el sector privado tiene menos protagonismo."
+        },
+        jak: {
+          titulo: "Libertad de elección",
+          texto:
+            "JAK propone que las personas elijan dónde atenderse (público o privado). El Estado entrega una 'tarjeta social' (tipo voucher) para financiar la atención."
+        }
+      },
+      {
+        id: "pensiones",
+        nombre: "Pensiones",
+        descripcion: "Qué tipo de sistema de pensiones y qué edad de jubilación quiere cada programa.",
+        pc: {
+          titulo: "Sistema solidario sin AFP (manteniendo la edad de jubilación)",
+          texto:
+            "En Chile hoy la edad legal de jubilación es 60 años para las mujeres y 65 años para los hombres. El programa del PC no propone aumentar esa edad: se enfoca en terminar con las AFP y crear un seguro social solidario, manteniendo la edad de retiro y mejorando el monto de las pensiones."
+        },
+        jak: {
+          titulo: "Cuentas individuales y alza de la edad de jubilación",
+          texto:
+            "El programa de Kast plantea subir la edad de jubilación, empezando por aumentar la edad de las mujeres para ir igualándola a la de los hombres (hoy 65 años). Además de eso, mantiene el modelo de ahorro individual, sube en 4 puntos la cotización a la cuenta personal y propone una pensión básica financiada por el Estado."
+        }
+      },
+      {
+        id: "economia",
+        nombre: "Economía e impuestos",
+        descripcion: "De dónde viene la plata y qué rol tiene el Estado.",
+        pc: {
+          titulo: "Más impuestos a los que tienen más",
+          texto:
+            "El PC quiere subir impuestos a los más ricos, eliminar privilegios tributarios y fortalecer empresas estatales (cobre, litio, energía) para financiar derechos sociales."
+        },
+        jak: {
+          titulo: "Menos impuestos, más mercado",
+          texto:
+            "JAK propone bajar el impuesto a las empresas y el IVA, y promover el 'capitalismo popular' (que la gente compre acciones de empresas estatales)."
+        }
+      },
+      {
+        id: "seguridad",
+        nombre: "Seguridad",
+        descripcion: "Cómo enfrentar la delincuencia y la violencia.",
+        pc: {
+          titulo: "Prevención e inteligencia policial",
+          texto:
+            "El PC prioriza la prevención social en barrios, la investigación y la inteligencia policial, manteniendo control civil sobre Carabineros y PDI."
+        },
+        jak: {
+          titulo: "Mano dura y rol militar",
+          texto:
+            "JAK propone más mano dura, respaldo total a Carabineros y uso de Fuerzas Armadas en seguridad interna (frontera, narcotráfico, Araucanía)."
+        }
+      },
+      {
+        id: "ddhh",
+        nombre: "Democracia y DD.HH.",
+        descripcion: "Instituciones, participación y derechos humanos.",
+        pc: {
+          titulo: "Refuerzo de DD.HH. y participación",
+          texto:
+            "El PC quiere fortalecer el INDH, prohibir el negacionismo de violaciones a los DD.HH. y ampliar mecanismos de participación (plebiscitos, iniciativas populares)."
+        },
+        jak: {
+          titulo: "Reforma de instituciones y control",
+          texto:
+            "JAK propone cerrar el INDH, crear una nueva institución, sacar a Chile del Consejo de DD.HH. de la ONU y centrarse en transparencia patrimonial de autoridades."
+        }
+      },
+      {
+        id: "genero",
+        nombre: "Mujeres y género",
+        descripcion: "Derechos de las mujeres y diversidades.",
+        pc: {
+          titulo: "Más derechos y protección",
+          texto:
+            "El PC impulsa aborto libre, seguro y gratuito, fortalecimiento del Ministerio de la Mujer y políticas contra la violencia de género."
+        },
+        jak: {
+          titulo: "Postura más conservadora",
+          texto:
+            "JAK busca derogar la ley de aborto, reforzar la objeción de conciencia y cerrar el Ministerio de la Mujer, con énfasis en la familia tradicional."
+        }
+      },
+      {
+        id: "migracion",
+        nombre: "Migración",
+        descripcion: "Tratamiento de la migración, sobre todo la irregular.",
+        pc: {
+          titulo: "Enfoque más humanitario",
+          texto:
+            "El PC se centra en un país más justo y seguro, con énfasis en derechos humanos y regulación, sin un eje duro específico de expulsiones masivas."
+        },
+        jak: {
+          titulo: "Control estricto y expulsión",
+          texto:
+            "JAK quiere frenar fuertemente la migración ilegal, crear recintos transitorios para expulsión rápida y usar apoyo militar en la frontera."
+        }
+      }
+    ];
+
+    const temaButtonsContainer = document.getElementById("temaButtons");
+    const temaDescripcionEl = document.getElementById("temaDescripcion");
+    const pcTituloEl = document.getElementById("pcTitulo");
+    const pcTextoEl = document.getElementById("pcTexto");
+    const jakTituloEl = document.getElementById("jakTitulo");
+    const jakTextoEl = document.getElementById("jakTexto");
+
+    let temaSeleccionadoId = TEMAS[0].id;
+
+    function renderTemaButtons() {
+      temaButtonsContainer.innerHTML = "";
+      TEMAS.forEach((tema) => {
+        const btn = document.createElement("button");
+        btn.textContent = tema.nombre;
+        btn.className = "tema-button" + (tema.id === temaSeleccionadoId ? " active" : "");
+        btn.addEventListener("click", () => {
+          temaSeleccionadoId = tema.id;
+          actualizarVista();
+        });
+        temaButtonsContainer.appendChild(btn);
+      });
+    }
+
+    function actualizarVista() {
+      const temaActual = TEMAS.find((t) => t.id === temaSeleccionadoId);
+      if (!temaActual) return;
+
+      // Actualizar descripción
+      temaDescripcionEl.innerHTML =
+        "<span>¿Qué comparamos aquí?</span> " + temaActual.descripcion;
+
+      // Actualizar tarjetas
+      pcTituloEl.textContent = temaActual.pc.titulo;
+      pcTextoEl.textContent = temaActual.pc.texto;
+      jakTituloEl.textContent = temaActual.jak.titulo;
+      jakTextoEl.textContent = temaActual.jak.texto;
+
+      // Volver a pintar botones (para la clase active)
+      renderTemaButtons();
+    }
+
+    // Inicializar
+    actualizarVista();
+  </script>
+</body>
+</html>
